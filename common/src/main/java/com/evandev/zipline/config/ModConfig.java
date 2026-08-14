@@ -28,6 +28,7 @@ public class ModConfig {
     public double maxSpeed = 2.5;
     public boolean downhillOnly = true;
     public double downhillHeightTolerance = 0.5;
+    public boolean autoDetachAtEnd = true;
     public double exitJumpMultiplier = 1.4;
     public boolean exitJumpUsesLookDirection = true;
     public boolean consumeDurability = true;

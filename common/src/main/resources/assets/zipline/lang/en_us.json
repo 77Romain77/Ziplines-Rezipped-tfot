@@ -24,6 +24,8 @@
   "config.zipline.option.downhill_only.tooltip": "Forces non-horizontal ziplines to travel only toward their lower endpoint and blocks reattaching farther uphill on the same cable",
   "config.zipline.option.downhill_height_tolerance": "Horizontal Height Tolerance",
   "config.zipline.option.downhill_height_tolerance.tooltip": "Endpoint height difference at or below this value is treated as horizontal and remains bidirectional",
+  "config.zipline.option.auto_detach_at_end": "Auto Detach at End",
+  "config.zipline.option.auto_detach_at_end.tooltip": "Automatically detaches at the end of a zipline when there is no valid connected cable to continue onto",
   "config.zipline.option.exit_jump_multiplier": "Exit Jump Multiplier",
   "config.zipline.option.exit_jump_multiplier.tooltip": "Multiplies vertical jump strength when jumping off a zipline. Set to 0 to disable the jump",
   "config.zipline.option.exit_jump_uses_look_direction": "Jump Exit Uses Look Direction",

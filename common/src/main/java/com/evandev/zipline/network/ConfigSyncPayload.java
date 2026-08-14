@@ -14,6 +14,7 @@ public record ConfigSyncPayload(
         double maxSpeed,
         boolean downhillOnly,
         double downhillHeightTolerance,
+        boolean autoDetachAtEnd,
         double exitJumpMultiplier,
         boolean exitJumpUsesLookDirection,
         boolean consumeDurability,
@@ -26,8 +27,9 @@ public record ConfigSyncPayload(
                 buf.readDouble(), buf.readDouble(), buf.readBoolean(),
                 buf.readDouble(), buf.readDouble(), buf.readDouble(),
                 buf.readBoolean(), buf.readDouble(), buf.readBoolean(),
-                buf.readDouble(), buf.readDouble(), buf.readBoolean(),
-                buf.readBoolean(), buf.readInt(), buf.readBoolean()
+                buf.readDouble(), buf.readBoolean(), buf.readDouble(),
+                buf.readBoolean(), buf.readBoolean(), buf.readInt(),
+                buf.readBoolean()
         );
     }
 
@@ -36,9 +38,10 @@ public record ConfigSyncPayload(
                 config.snapRadius, config.clickReach, config.useAnywhere,
                 config.maxTurnAngle, config.hangOffset, config.speedMultiplier,
                 config.realisticPhysics, config.maxSpeed, config.downhillOnly,
-                config.downhillHeightTolerance, config.exitJumpMultiplier,
-                config.exitJumpUsesLookDirection, config.consumeDurability,
-                config.releaseCooldown, config.jumpRequiredToDismount
+                config.downhillHeightTolerance, config.autoDetachAtEnd,
+                config.exitJumpMultiplier, config.exitJumpUsesLookDirection,
+                config.consumeDurability, config.releaseCooldown,
+                config.jumpRequiredToDismount
         );
     }
 
@@ -53,6 +56,7 @@ public record ConfigSyncPayload(
         buf.writeDouble(maxSpeed);
         buf.writeBoolean(downhillOnly);
         buf.writeDouble(downhillHeightTolerance);
+        buf.writeBoolean(autoDetachAtEnd);
         buf.writeDouble(exitJumpMultiplier);
         buf.writeBoolean(exitJumpUsesLookDirection);
         buf.writeBoolean(consumeDurability);
@@ -72,6 +76,7 @@ public record ConfigSyncPayload(
         config.maxSpeed = this.maxSpeed;
         config.downhillOnly = this.downhillOnly;
         config.downhillHeightTolerance = this.downhillHeightTolerance;
+        config.autoDetachAtEnd = this.autoDetachAtEnd;
         config.exitJumpMultiplier = this.exitJumpMultiplier;
         config.exitJumpUsesLookDirection = this.exitJumpUsesLookDirection;
         config.consumeDurability = this.consumeDurability;

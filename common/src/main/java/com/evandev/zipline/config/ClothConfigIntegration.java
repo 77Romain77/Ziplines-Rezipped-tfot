@@ -95,6 +95,12 @@ public class ClothConfigIntegration {
                 .setSaveConsumer(newValue -> { if (!isServer) config.downhillHeightTolerance = newValue; })
                 .build());
 
+        general.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.zipline.option.auto_detach_at_end"), config.autoDetachAtEnd)
+                .setDefaultValue(true)
+                .setTooltip(Component.translatable("config.zipline.option.auto_detach_at_end.tooltip"))
+                .setSaveConsumer(newValue -> { if (!isServer) config.autoDetachAtEnd = newValue; })
+                .build());
+
         general.addEntry(entryBuilder.startDoubleField(Component.translatable("config.zipline.option.exit_jump_multiplier"), config.exitJumpMultiplier)
                 .setDefaultValue(1.4)
                 .setTooltip(Component.translatable("config.zipline.option.exit_jump_multiplier.tooltip"))

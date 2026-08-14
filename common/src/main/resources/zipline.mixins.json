@@ -9,6 +9,7 @@
     "LivingEntityAccessor",
     "PlayerMixin",
     "ServerGamePacketListenerImplMixin",
+    "ZiplineLogicMixin",
     "compat.connectiblechains.EntityMixin"
   ],
   "client": [
