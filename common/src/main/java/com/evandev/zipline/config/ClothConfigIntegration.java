@@ -64,6 +64,7 @@ public class ClothConfigIntegration {
 
         general.addEntry(entryBuilder.startDoubleField(Component.translatable("config.zipline.option.speed_multiplier"), config.speedMultiplier)
                 .setDefaultValue(1.0)
+                .setMin(0.0)
                 .setTooltip(Component.translatable("config.zipline.option.speed_multiplier.tooltip"))
                 .setSaveConsumer(newValue -> { if (!isServer) config.speedMultiplier = newValue; })
                 .build());
@@ -72,6 +73,26 @@ public class ClothConfigIntegration {
                 .setDefaultValue(false)
                 .setTooltip(Component.translatable("config.zipline.option.realistic_physics.tooltip"))
                 .setSaveConsumer(newValue -> { if (!isServer) config.realisticPhysics = newValue; })
+                .build());
+
+        general.addEntry(entryBuilder.startDoubleField(Component.translatable("config.zipline.option.max_speed"), config.maxSpeed)
+                .setDefaultValue(2.5)
+                .setMin(0.0)
+                .setTooltip(Component.translatable("config.zipline.option.max_speed.tooltip"))
+                .setSaveConsumer(newValue -> { if (!isServer) config.maxSpeed = newValue; })
+                .build());
+
+        general.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.zipline.option.downhill_only"), config.downhillOnly)
+                .setDefaultValue(true)
+                .setTooltip(Component.translatable("config.zipline.option.downhill_only.tooltip"))
+                .setSaveConsumer(newValue -> { if (!isServer) config.downhillOnly = newValue; })
+                .build());
+
+        general.addEntry(entryBuilder.startDoubleField(Component.translatable("config.zipline.option.downhill_height_tolerance"), config.downhillHeightTolerance)
+                .setDefaultValue(0.5)
+                .setMin(0.0)
+                .setTooltip(Component.translatable("config.zipline.option.downhill_height_tolerance.tooltip"))
+                .setSaveConsumer(newValue -> { if (!isServer) config.downhillHeightTolerance = newValue; })
                 .build());
 
         general.addEntry(entryBuilder.startDoubleField(Component.translatable("config.zipline.option.exit_jump_multiplier"), config.exitJumpMultiplier)
@@ -91,6 +112,12 @@ public class ClothConfigIntegration {
                 .setMin(0)
                 .setTooltip(Component.translatable("config.zipline.option.release_cooldown.tooltip"))
                 .setSaveConsumer(newValue -> { if (!isServer) config.releaseCooldown = newValue; })
+                .build());
+
+        general.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.zipline.option.jump_required_to_dismount"), config.jumpRequiredToDismount)
+                .setDefaultValue(true)
+                .setTooltip(Component.translatable("config.zipline.option.jump_required_to_dismount.tooltip"))
+                .setSaveConsumer(newValue -> { if (!isServer) config.jumpRequiredToDismount = newValue; })
                 .build());
 
         return builder.build();

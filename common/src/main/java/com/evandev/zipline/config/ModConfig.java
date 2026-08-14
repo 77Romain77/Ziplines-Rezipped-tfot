@@ -25,9 +25,13 @@ public class ModConfig {
     public double hangOffset = 2.3;
     public double speedMultiplier = 1.0;
     public boolean realisticPhysics = false;
+    public double maxSpeed = 2.5;
+    public boolean downhillOnly = true;
+    public double downhillHeightTolerance = 0.5;
     public double exitJumpMultiplier = 1.4;
     public boolean consumeDurability = true;
     public int releaseCooldown = 10;
+    public boolean jumpRequiredToDismount = true;
 
     public static ModConfig get() {
         if (INSTANCE == null) {

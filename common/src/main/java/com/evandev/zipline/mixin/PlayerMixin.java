@@ -21,6 +21,14 @@ public class PlayerMixin implements ZiplinePlayerDuck {
     private Vec3 zipline$lastDir;
     @Unique
     private boolean zipline$actuallyUsing;
+    @Unique
+    private int zipline$attachTicks;
+    @Unique
+    private boolean zipline$wasJumpingAtAttach;
+    @Unique
+    private Cable zipline$lastExitedCable;
+    @Unique
+    private double zipline$lastExitDownhillProgress;
 
     @Override
     public Cable zipline$getCable() {
@@ -80,5 +88,45 @@ public class PlayerMixin implements ZiplinePlayerDuck {
     @Override
     public void zipline$setActuallyUsing(boolean using) {
         this.zipline$actuallyUsing = using;
+    }
+
+    @Override
+    public int zipline$getAttachTicks() {
+        return zipline$attachTicks;
+    }
+
+    @Override
+    public void zipline$setAttachTicks(int ticks) {
+        this.zipline$attachTicks = ticks;
+    }
+
+    @Override
+    public boolean zipline$wasJumpingAtAttach() {
+        return zipline$wasJumpingAtAttach;
+    }
+
+    @Override
+    public void zipline$setWasJumpingAtAttach(boolean wasJumping) {
+        this.zipline$wasJumpingAtAttach = wasJumping;
+    }
+
+    @Override
+    public Cable zipline$getLastExitedCable() {
+        return zipline$lastExitedCable;
+    }
+
+    @Override
+    public void zipline$setLastExitedCable(Cable cable) {
+        this.zipline$lastExitedCable = cable;
+    }
+
+    @Override
+    public double zipline$getLastExitDownhillProgress() {
+        return zipline$lastExitDownhillProgress;
+    }
+
+    @Override
+    public void zipline$setLastExitDownhillProgress(double progress) {
+        this.zipline$lastExitDownhillProgress = progress;
     }
 }

@@ -11,9 +11,13 @@ public record ConfigSyncPayload(
         double hangOffset,
         double speedMultiplier,
         boolean realisticPhysics,
+        double maxSpeed,
+        boolean downhillOnly,
+        double downhillHeightTolerance,
         double exitJumpMultiplier,
         boolean consumeDurability,
-        int releaseCooldown
+        int releaseCooldown,
+        boolean jumpRequiredToDismount
 ) {
 
     public ConfigSyncPayload(FriendlyByteBuf buf) {
@@ -21,7 +25,8 @@ public record ConfigSyncPayload(
                 buf.readDouble(), buf.readDouble(), buf.readBoolean(),
                 buf.readDouble(), buf.readDouble(), buf.readDouble(),
                 buf.readBoolean(), buf.readDouble(), buf.readBoolean(),
-                buf.readInt()
+                buf.readDouble(), buf.readDouble(), buf.readBoolean(),
+                buf.readInt(), buf.readBoolean()
         );
     }
 
@@ -29,8 +34,10 @@ public record ConfigSyncPayload(
         return new ConfigSyncPayload(
                 config.snapRadius, config.clickReach, config.useAnywhere,
                 config.maxTurnAngle, config.hangOffset, config.speedMultiplier,
-                config.realisticPhysics, config.exitJumpMultiplier,
-                config.consumeDurability, config.releaseCooldown
+                config.realisticPhysics, config.maxSpeed, config.downhillOnly,
+                config.downhillHeightTolerance, config.exitJumpMultiplier,
+                config.consumeDurability, config.releaseCooldown,
+                config.jumpRequiredToDismount
         );
     }
 
@@ -42,9 +49,13 @@ public record ConfigSyncPayload(
         buf.writeDouble(hangOffset);
         buf.writeDouble(speedMultiplier);
         buf.writeBoolean(realisticPhysics);
+        buf.writeDouble(maxSpeed);
+        buf.writeBoolean(downhillOnly);
+        buf.writeDouble(downhillHeightTolerance);
         buf.writeDouble(exitJumpMultiplier);
         buf.writeBoolean(consumeDurability);
         buf.writeInt(releaseCooldown);
+        buf.writeBoolean(jumpRequiredToDismount);
     }
 
     public ModConfig toModConfig() {
@@ -56,9 +67,13 @@ public record ConfigSyncPayload(
         config.hangOffset = this.hangOffset;
         config.speedMultiplier = this.speedMultiplier;
         config.realisticPhysics = this.realisticPhysics;
+        config.maxSpeed = this.maxSpeed;
+        config.downhillOnly = this.downhillOnly;
+        config.downhillHeightTolerance = this.downhillHeightTolerance;
         config.exitJumpMultiplier = this.exitJumpMultiplier;
         config.consumeDurability = this.consumeDurability;
         config.releaseCooldown = this.releaseCooldown;
+        config.jumpRequiredToDismount = this.jumpRequiredToDismount;
         return config;
     }
 }
