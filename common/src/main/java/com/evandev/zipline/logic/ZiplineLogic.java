@@ -19,7 +19,7 @@ import net.minecraft.util.Mth;
 
 public class ZiplineLogic {
     private static final double ATTACH_THRESHOLD_PADDING = 1.01;
-    private static final double REATTACH_PROGRESS_EPSILON = 0.01;
+    private static final double REATTACH_DISTANCE_TOLERANCE = 0.05;
     private static final double SAME_CABLE_EPSILON_SQR = 0.0001;
 
     public static void inventoryTick(LivingEntity livingEntity) {
@@ -395,7 +395,8 @@ public class ZiplineLogic {
         }
 
         double candidateDownhillProgress = getDownhillProgress(cable, progress);
-        return candidateDownhillProgress + REATTACH_PROGRESS_EPSILON
+        double progressTolerance = REATTACH_DISTANCE_TOLERANCE / Math.max(1.0, cable.length());
+        return candidateDownhillProgress + progressTolerance
                 < duck.zipline$getLastExitDownhillProgress();
     }
 
