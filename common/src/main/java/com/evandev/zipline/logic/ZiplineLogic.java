@@ -140,7 +140,7 @@ public class ZiplineLogic {
         duck.zipline$setAttachTicks(attachTicks + 1);
 
         if (player.isShiftKeyDown()) {
-            release(player, stack);
+            detach(player, stack, false);
             player.stopUsingItem();
             return;
         }
@@ -152,7 +152,7 @@ public class ZiplineLogic {
 
         boolean canJumpDismount = attachTicks >= 5 && !duck.zipline$wasJumpingAtAttach();
         if (isJumping && canJumpDismount) {
-            release(player, stack);
+            detach(player, stack, true);
             player.stopUsingItem();
             return;
         }
@@ -319,9 +319,7 @@ public class ZiplineLogic {
         }
 
         player.stopUsingItem();
-        if (!player.isShiftKeyDown()) {
-            applyExitMomentum(player, duck);
-        }
+        applyExitMomentum(player, duck, false);
         disable(duck);
         player.playSound(ZiplineSoundEvents.ZIPLINE_INTERRUPT.get(), 0.5f, 1);
     }
@@ -335,39 +333,41 @@ public class ZiplineLogic {
     }
 
     public static void release(Player player, ItemStack stack) {
+        boolean isJumping = ((LivingEntityAccessor) player).zipline$isJumping();
+        boolean boostedExit = isJumping || !ModConfig.get().jumpRequiredToDismount;
+        detach(player, stack, boostedExit);
+    }
+
+    private static void detach(Player player, ItemStack stack, boolean boostedExit) {
         ZiplinePlayerDuck duck = (ZiplinePlayerDuck) player;
 
         player.getCooldowns().addCooldown(stack.getItem(), ModConfig.get().releaseCooldown);
 
-        if (duck.zipline$isActuallyUsing()) {
-            rememberExit(duck);
-
-            boolean isJumping = ((LivingEntityAccessor) player).zipline$isJumping();
-            boolean shouldApplyVerticalBoost = isJumping || !ModConfig.get().jumpRequiredToDismount;
-
-            if (shouldApplyVerticalBoost && !player.isShiftKeyDown()) {
-                double jumpY = 0.5 * ModConfig.get().exitJumpMultiplier;
-                player.addDeltaMovement(new Vec3(0, jumpY, 0));
-            }
-
-            if (!player.isShiftKeyDown()) {
-                applyExitMomentum(player, duck);
-            }
-            disable(duck);
+        if (!duck.zipline$isActuallyUsing()) {
+            return;
         }
+
+        rememberExit(duck);
+
+        if (boostedExit) {
+            double jumpY = 0.5 * ModConfig.get().exitJumpMultiplier;
+            player.addDeltaMovement(new Vec3(0, jumpY, 0));
+        }
+
+        applyExitMomentum(player, duck, boostedExit);
+        disable(duck);
     }
 
-    private static void applyExitMomentum(LivingEntity livingEntity, ZiplinePlayerDuck duck) {
+    private static void applyExitMomentum(LivingEntity livingEntity, ZiplinePlayerDuck duck, boolean boostedExit) {
         Vec3 lastDir = duck.zipline$getLastDir();
         if (lastDir != null) {
             livingEntity.addDeltaMovement(lastDir);
         }
 
-        double lookMomentumMultiplier = ModConfig.get().exitLookMomentumMultiplier;
-        if (lookMomentumMultiplier > 0.0) {
+        if (boostedExit && ModConfig.get().exitJumpUsesLookDirection) {
             Vec3 look = livingEntity.getLookAngle();
             Vec3 horizontalLook = new Vec3(look.x, 0.0, look.z);
-            livingEntity.addDeltaMovement(horizontalLook.scale(lookMomentumMultiplier));
+            livingEntity.addDeltaMovement(horizontalLook.scale(0.5));
         }
     }
 
