@@ -15,7 +15,7 @@ public record ConfigSyncPayload(
         boolean downhillOnly,
         double downhillHeightTolerance,
         double exitJumpMultiplier,
-        double exitLookMomentumMultiplier,
+        boolean exitJumpUsesLookDirection,
         boolean consumeDurability,
         int releaseCooldown,
         boolean jumpRequiredToDismount
@@ -26,7 +26,7 @@ public record ConfigSyncPayload(
                 buf.readDouble(), buf.readDouble(), buf.readBoolean(),
                 buf.readDouble(), buf.readDouble(), buf.readDouble(),
                 buf.readBoolean(), buf.readDouble(), buf.readBoolean(),
-                buf.readDouble(), buf.readDouble(), buf.readDouble(),
+                buf.readDouble(), buf.readDouble(), buf.readBoolean(),
                 buf.readBoolean(), buf.readInt(), buf.readBoolean()
         );
     }
@@ -37,7 +37,7 @@ public record ConfigSyncPayload(
                 config.maxTurnAngle, config.hangOffset, config.speedMultiplier,
                 config.realisticPhysics, config.maxSpeed, config.downhillOnly,
                 config.downhillHeightTolerance, config.exitJumpMultiplier,
-                config.exitLookMomentumMultiplier, config.consumeDurability,
+                config.exitJumpUsesLookDirection, config.consumeDurability,
                 config.releaseCooldown, config.jumpRequiredToDismount
         );
     }
@@ -54,7 +54,7 @@ public record ConfigSyncPayload(
         buf.writeBoolean(downhillOnly);
         buf.writeDouble(downhillHeightTolerance);
         buf.writeDouble(exitJumpMultiplier);
-        buf.writeDouble(exitLookMomentumMultiplier);
+        buf.writeBoolean(exitJumpUsesLookDirection);
         buf.writeBoolean(consumeDurability);
         buf.writeInt(releaseCooldown);
         buf.writeBoolean(jumpRequiredToDismount);
@@ -73,7 +73,7 @@ public record ConfigSyncPayload(
         config.downhillOnly = this.downhillOnly;
         config.downhillHeightTolerance = this.downhillHeightTolerance;
         config.exitJumpMultiplier = this.exitJumpMultiplier;
-        config.exitLookMomentumMultiplier = this.exitLookMomentumMultiplier;
+        config.exitJumpUsesLookDirection = this.exitJumpUsesLookDirection;
         config.consumeDurability = this.consumeDurability;
         config.releaseCooldown = this.releaseCooldown;
         config.jumpRequiredToDismount = this.jumpRequiredToDismount;
