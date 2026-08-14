@@ -139,6 +139,12 @@ public class ZiplineLogic {
         int attachTicks = duck.zipline$getAttachTicks();
         duck.zipline$setAttachTicks(attachTicks + 1);
 
+        if (player.isShiftKeyDown()) {
+            release(player, stack);
+            player.stopUsingItem();
+            return;
+        }
+
         boolean isJumping = ((LivingEntityAccessor) player).zipline$isJumping();
         if (duck.zipline$wasJumpingAtAttach() && !isJumping) {
             duck.zipline$setWasJumpingAtAttach(false);
@@ -355,6 +361,13 @@ public class ZiplineLogic {
         Vec3 lastDir = duck.zipline$getLastDir();
         if (lastDir != null) {
             livingEntity.addDeltaMovement(lastDir);
+        }
+
+        double lookMomentumMultiplier = ModConfig.get().exitLookMomentumMultiplier;
+        if (lookMomentumMultiplier > 0.0) {
+            Vec3 look = livingEntity.getLookAngle();
+            Vec3 horizontalLook = new Vec3(look.x, 0.0, look.z);
+            livingEntity.addDeltaMovement(horizontalLook.scale(lookMomentumMultiplier));
         }
     }
 

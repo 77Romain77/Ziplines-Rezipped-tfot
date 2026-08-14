@@ -26,6 +26,8 @@
   "config.zipline.option.downhill_height_tolerance.tooltip": "Endpoint height difference at or below this value is treated as horizontal and remains bidirectional",
   "config.zipline.option.exit_jump_multiplier": "Exit Jump Multiplier",
   "config.zipline.option.exit_jump_multiplier.tooltip": "Multiplies vertical jump strength when jumping off a zipline. Set to 0 to disable the jump",
+  "config.zipline.option.exit_look_momentum_multiplier": "Exit Look Momentum Multiplier",
+  "config.zipline.option.exit_look_momentum_multiplier.tooltip": "Adds horizontal exit momentum in the direction the player is looking. 0 disables it; 0.5 gives a feel close to the older behavior",
   "config.zipline.option.consume_durability": "Consume Durability",
   "config.zipline.option.consume_durability.tooltip": "If enabled, the zipline item slowly loses durability while being used",
   "config.zipline.option.release_cooldown": "Release Cooldown",

@@ -101,6 +101,13 @@ public class ClothConfigIntegration {
                 .setSaveConsumer(newValue -> { if (!isServer) config.exitJumpMultiplier = newValue; })
                 .build());
 
+        general.addEntry(entryBuilder.startDoubleField(Component.translatable("config.zipline.option.exit_look_momentum_multiplier"), config.exitLookMomentumMultiplier)
+                .setDefaultValue(0.0)
+                .setMin(0.0)
+                .setTooltip(Component.translatable("config.zipline.option.exit_look_momentum_multiplier.tooltip"))
+                .setSaveConsumer(newValue -> { if (!isServer) config.exitLookMomentumMultiplier = newValue; })
+                .build());
+
         general.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.zipline.option.consume_durability"), config.consumeDurability)
                 .setDefaultValue(true)
                 .setTooltip(Component.translatable("config.zipline.option.consume_durability.tooltip"))

@@ -29,6 +29,7 @@ public class ModConfig {
     public boolean downhillOnly = true;
     public double downhillHeightTolerance = 0.5;
     public double exitJumpMultiplier = 1.4;
+    public double exitLookMomentumMultiplier = 0.0;
     public boolean consumeDurability = true;
     public int releaseCooldown = 10;
     public boolean jumpRequiredToDismount = true;
