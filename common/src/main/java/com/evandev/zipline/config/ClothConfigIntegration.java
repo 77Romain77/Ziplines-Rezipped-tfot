@@ -75,8 +75,24 @@ public class ClothConfigIntegration {
                 .setSaveConsumer(newValue -> { if (!isServer) config.realisticPhysics = newValue; })
                 .build());
 
+        general.addEntry(entryBuilder.startDoubleField(Component.translatable("config.zipline.option.gravity_strength"), config.gravityStrength)
+                .setDefaultValue(0.04)
+                .setMin(0.0)
+                .setMax(0.2)
+                .setTooltip(Component.translatable("config.zipline.option.gravity_strength.tooltip"))
+                .setSaveConsumer(newValue -> { if (!isServer) config.gravityStrength = newValue; })
+                .build());
+
+        general.addEntry(entryBuilder.startDoubleField(Component.translatable("config.zipline.option.velocity_retention"), config.velocityRetention)
+                .setDefaultValue(0.98)
+                .setMin(0.0)
+                .setMax(1.0)
+                .setTooltip(Component.translatable("config.zipline.option.velocity_retention.tooltip"))
+                .setSaveConsumer(newValue -> { if (!isServer) config.velocityRetention = newValue; })
+                .build());
+
         general.addEntry(entryBuilder.startDoubleField(Component.translatable("config.zipline.option.max_speed"), config.maxSpeed)
-                .setDefaultValue(2.5)
+                .setDefaultValue(50.0)
                 .setMin(0.0)
                 .setTooltip(Component.translatable("config.zipline.option.max_speed.tooltip"))
                 .setSaveConsumer(newValue -> { if (!isServer) config.maxSpeed = newValue; })

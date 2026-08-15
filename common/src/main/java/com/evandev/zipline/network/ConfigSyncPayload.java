@@ -11,6 +11,8 @@ public record ConfigSyncPayload(
         double hangOffset,
         double speedMultiplier,
         boolean realisticPhysics,
+        double gravityStrength,
+        double velocityRetention,
         double maxSpeed,
         boolean downhillOnly,
         double downhillHeightTolerance,
@@ -26,10 +28,10 @@ public record ConfigSyncPayload(
         this(
                 buf.readDouble(), buf.readDouble(), buf.readBoolean(),
                 buf.readDouble(), buf.readDouble(), buf.readDouble(),
-                buf.readBoolean(), buf.readDouble(), buf.readBoolean(),
+                buf.readBoolean(), buf.readDouble(), buf.readDouble(),
                 buf.readDouble(), buf.readBoolean(), buf.readDouble(),
-                buf.readBoolean(), buf.readBoolean(), buf.readInt(),
-                buf.readBoolean()
+                buf.readBoolean(), buf.readDouble(), buf.readBoolean(),
+                buf.readBoolean(), buf.readInt(), buf.readBoolean()
         );
     }
 
@@ -37,7 +39,8 @@ public record ConfigSyncPayload(
         return new ConfigSyncPayload(
                 config.snapRadius, config.clickReach, config.useAnywhere,
                 config.maxTurnAngle, config.hangOffset, config.speedMultiplier,
-                config.realisticPhysics, config.maxSpeed, config.downhillOnly,
+                config.realisticPhysics, config.gravityStrength,
+                config.velocityRetention, config.maxSpeed, config.downhillOnly,
                 config.downhillHeightTolerance, config.autoDetachAtEnd,
                 config.exitJumpMultiplier, config.exitJumpUsesLookDirection,
                 config.consumeDurability, config.releaseCooldown,
@@ -53,6 +56,8 @@ public record ConfigSyncPayload(
         buf.writeDouble(hangOffset);
         buf.writeDouble(speedMultiplier);
         buf.writeBoolean(realisticPhysics);
+        buf.writeDouble(gravityStrength);
+        buf.writeDouble(velocityRetention);
         buf.writeDouble(maxSpeed);
         buf.writeBoolean(downhillOnly);
         buf.writeDouble(downhillHeightTolerance);
@@ -73,6 +78,8 @@ public record ConfigSyncPayload(
         config.hangOffset = this.hangOffset;
         config.speedMultiplier = this.speedMultiplier;
         config.realisticPhysics = this.realisticPhysics;
+        config.gravityStrength = this.gravityStrength;
+        config.velocityRetention = this.velocityRetention;
         config.maxSpeed = this.maxSpeed;
         config.downhillOnly = this.downhillOnly;
         config.downhillHeightTolerance = this.downhillHeightTolerance;

@@ -21,6 +21,7 @@ public class ZiplineLogic {
     private static final double ATTACH_THRESHOLD_PADDING = 1.01;
     private static final double REATTACH_DISTANCE_TOLERANCE = 0.05;
     private static final double SAME_CABLE_EPSILON_SQR = 0.0001;
+    private static final double TICKS_PER_SECOND = 20.0;
 
     public static void inventoryTick(LivingEntity livingEntity) {
         if (!(livingEntity instanceof Player player)) {
@@ -188,11 +189,12 @@ public class ZiplineLogic {
             Vec3 pBackward = cable.getPoint(tBackward);
             Vec3 tangent = pForward.subtract(pBackward).normalize();
 
-            double gravityAccel = 0.04;
-            double acceleration = -gravityAccel * tangent.y;
+            double gravityStrength = Math.max(0.0, ModConfig.get().gravityStrength);
+            double velocityRetention = Mth.clamp(ModConfig.get().velocityRetention, 0.0, 1.0);
+            double acceleration = -gravityStrength * tangent.y;
 
             velocity += acceleration;
-            velocity *= 0.98;
+            velocity *= velocityRetention;
 
             if (Math.abs(velocity) < 0.01 && Math.abs(tangent.y) < 0.1) {
                 velocity = 0;
@@ -216,9 +218,10 @@ public class ZiplineLogic {
             speedMultiplier = Math.abs(speedMultiplier);
         }
 
-        double maxSpeed = ModConfig.get().maxSpeed;
-        if (maxSpeed > 0 && Math.abs(speedMultiplier) > 0.000001) {
-            double maxInternalSpeed = maxSpeed / Math.abs(speedMultiplier);
+        double maxSpeedBlocksPerSecond = ModConfig.get().maxSpeed;
+        if (maxSpeedBlocksPerSecond > 0 && Math.abs(speedMultiplier) > 0.000001) {
+            double maxSpeedPerTick = maxSpeedBlocksPerSecond / TICKS_PER_SECOND;
+            double maxInternalSpeed = maxSpeedPerTick / Math.abs(speedMultiplier);
             velocity = Mth.clamp(velocity, -maxInternalSpeed, maxInternalSpeed);
         }
 
