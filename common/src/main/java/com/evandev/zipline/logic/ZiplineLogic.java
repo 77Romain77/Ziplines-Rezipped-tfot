@@ -282,7 +282,8 @@ public class ZiplineLogic {
         CollectionCandidate best = null;
         Vec3 exitPos = currentCable.getPoint(dirFactor == 1 ? 1.0 : 0.0);
         Vec3 playerDir = player.getLookAngle();
-        Vec3 movementDir = lastDir.lengthSqr() > 0.000001 ? lastDir.normalize() : Vec3.ZERO;
+        boolean hasMovementDirection = lastDir.lengthSqr() > 0.000001;
+        Vec3 movementDir = hasMovementDirection ? lastDir.normalize() : Vec3.ZERO;
 
         for (Cable next : currentCable.getNext(dirFactor == 1)) {
             if (sameCable(currentCable, next)) {
@@ -301,7 +302,7 @@ public class ZiplineLogic {
 
             double entryProgress = startAtBeginning ? 0.0 : 1.0;
             Vec3 travelDirection = next.direction(entryProgress).scale(travelDir).normalize();
-            double alignment = movementDir == Vec3.ZERO ? 1.0 : travelDirection.dot(movementDir);
+            double alignment = hasMovementDirection ? travelDirection.dot(movementDir) : 1.0;
 
             if (alignment <= ModConfig.get().maxTurnAngle) {
                 continue;
