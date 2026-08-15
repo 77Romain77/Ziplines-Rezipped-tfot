@@ -7,6 +7,7 @@ import com.evandev.zipline.config.ModConfig;
 import com.evandev.zipline.duck.ZiplinePlayerDuck;
 import com.evandev.zipline.mixin.LivingEntityAccessor;
 import com.evandev.zipline.registry.ZiplineSoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.util.Mth;
 
 public class ZiplineLogic {
     private static final double ATTACH_THRESHOLD_PADDING = 1.01;
@@ -252,6 +252,11 @@ public class ZiplineLogic {
         duck.zipline$setLastDir(lastDir);
 
         if (isInvalidPosition(player, lastDir)) {
+            if (isNearTravelEnd(cable, oldProgress, directionFactor)
+                    && handleCableSwitch(player, duck, cable, directionFactor, lastDir)) {
+                return;
+            }
+
             duck.zipline$setSpeed(0);
             duck.zipline$setProgress(oldProgress);
             newProgress = oldProgress;
@@ -267,11 +272,13 @@ public class ZiplineLogic {
         player.playSound(ZiplineSoundEvents.ZIPLINE_USE.get(), 1.0F, .3f + (float) duck.zipline$getSpeed());
 
         if (newProgress >= 1.0 || newProgress <= 0.0) {
-            handleCableSwitch(player, duck, cable, directionFactor, duck.zipline$getLastDir());
+            if (!handleCableSwitch(player, duck, cable, directionFactor, duck.zipline$getLastDir())) {
+                duck.zipline$setSpeed(0);
+            }
         }
     }
 
-    private static void handleCableSwitch(Player player, ZiplinePlayerDuck duck, Cable currentCable, int dirFactor, Vec3 lastDir) {
+    private static boolean handleCableSwitch(Player player, ZiplinePlayerDuck duck, Cable currentCable, int dirFactor, Vec3 lastDir) {
         CollectionCandidate best = null;
         Vec3 exitPos = currentCable.getPoint(dirFactor == 1 ? 1.0 : 0.0);
         Vec3 playerDir = player.getLookAngle();
@@ -307,13 +314,28 @@ public class ZiplineLogic {
         }
 
         if (best == null) {
-            interruptUsing(player, duck);
-            return;
+            if (ModConfig.get().autoDetachAtEnd) {
+                interruptUsing(player, duck);
+                return true;
+            }
+            return false;
         }
 
         duck.zipline$setCable(best.cable);
         duck.zipline$setProgress(best.startAtBeginning ? 0.0 : 1.0);
         duck.zipline$setDirectionFactor(best.travelDir);
+        return true;
+    }
+
+    private static boolean isNearTravelEnd(Cable cable, double progress, int dirFactor) {
+        double endDetectionDistance = Math.max(0.0, ModConfig.get().endDetectionDistance);
+        if (endDetectionDistance <= 0.0) {
+            return false;
+        }
+
+        Vec3 currentPoint = cable.getPoint(progress);
+        Vec3 targetEnd = cable.getPoint(dirFactor == 1 ? 1.0 : 0.0);
+        return currentPoint.distanceToSqr(targetEnd) <= endDetectionDistance * endDetectionDistance;
     }
 
     private static void interruptUsing(Player player, ZiplinePlayerDuck duck) {
@@ -368,9 +390,12 @@ public class ZiplineLogic {
         }
 
         if (boostedExit && ModConfig.get().exitJumpUsesLookDirection) {
-            Vec3 look = livingEntity.getLookAngle();
-            Vec3 horizontalLook = new Vec3(look.x, 0.0, look.z);
-            livingEntity.addDeltaMovement(horizontalLook.scale(0.5));
+            double lookBoost = Math.max(0.0, ModConfig.get().exitJumpLookBoost);
+            if (lookBoost > 0.0) {
+                Vec3 look = livingEntity.getLookAngle();
+                Vec3 horizontalLook = new Vec3(look.x, 0.0, look.z);
+                livingEntity.addDeltaMovement(horizontalLook.scale(lookBoost));
+            }
         }
     }
 

@@ -17,8 +17,10 @@ public record ConfigSyncPayload(
         boolean downhillOnly,
         double downhillHeightTolerance,
         boolean autoDetachAtEnd,
+        double endDetectionDistance,
         double exitJumpMultiplier,
         boolean exitJumpUsesLookDirection,
+        double exitJumpLookBoost,
         boolean consumeDurability,
         int releaseCooldown,
         boolean jumpRequiredToDismount
@@ -30,8 +32,9 @@ public record ConfigSyncPayload(
                 buf.readDouble(), buf.readDouble(), buf.readDouble(),
                 buf.readBoolean(), buf.readDouble(), buf.readDouble(),
                 buf.readDouble(), buf.readBoolean(), buf.readDouble(),
+                buf.readBoolean(), buf.readDouble(), buf.readDouble(),
                 buf.readBoolean(), buf.readDouble(), buf.readBoolean(),
-                buf.readBoolean(), buf.readInt(), buf.readBoolean()
+                buf.readInt(), buf.readBoolean()
         );
     }
 
@@ -42,7 +45,8 @@ public record ConfigSyncPayload(
                 config.realisticPhysics, config.gravityStrength,
                 config.velocityRetention, config.maxSpeed, config.downhillOnly,
                 config.downhillHeightTolerance, config.autoDetachAtEnd,
-                config.exitJumpMultiplier, config.exitJumpUsesLookDirection,
+                config.endDetectionDistance, config.exitJumpMultiplier,
+                config.exitJumpUsesLookDirection, config.exitJumpLookBoost,
                 config.consumeDurability, config.releaseCooldown,
                 config.jumpRequiredToDismount
         );
@@ -62,8 +66,10 @@ public record ConfigSyncPayload(
         buf.writeBoolean(downhillOnly);
         buf.writeDouble(downhillHeightTolerance);
         buf.writeBoolean(autoDetachAtEnd);
+        buf.writeDouble(endDetectionDistance);
         buf.writeDouble(exitJumpMultiplier);
         buf.writeBoolean(exitJumpUsesLookDirection);
+        buf.writeDouble(exitJumpLookBoost);
         buf.writeBoolean(consumeDurability);
         buf.writeInt(releaseCooldown);
         buf.writeBoolean(jumpRequiredToDismount);
@@ -84,8 +90,10 @@ public record ConfigSyncPayload(
         config.downhillOnly = this.downhillOnly;
         config.downhillHeightTolerance = this.downhillHeightTolerance;
         config.autoDetachAtEnd = this.autoDetachAtEnd;
+        config.endDetectionDistance = this.endDetectionDistance;
         config.exitJumpMultiplier = this.exitJumpMultiplier;
         config.exitJumpUsesLookDirection = this.exitJumpUsesLookDirection;
+        config.exitJumpLookBoost = this.exitJumpLookBoost;
         config.consumeDurability = this.consumeDurability;
         config.releaseCooldown = this.releaseCooldown;
         config.jumpRequiredToDismount = this.jumpRequiredToDismount;

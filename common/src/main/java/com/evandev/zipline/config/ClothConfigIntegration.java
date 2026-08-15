@@ -117,6 +117,14 @@ public class ClothConfigIntegration {
                 .setSaveConsumer(newValue -> { if (!isServer) config.autoDetachAtEnd = newValue; })
                 .build());
 
+        general.addEntry(entryBuilder.startDoubleField(Component.translatable("config.zipline.option.end_detection_distance"), config.endDetectionDistance)
+                .setDefaultValue(2.0)
+                .setMin(0.0)
+                .setMax(10.0)
+                .setTooltip(Component.translatable("config.zipline.option.end_detection_distance.tooltip"))
+                .setSaveConsumer(newValue -> { if (!isServer) config.endDetectionDistance = newValue; })
+                .build());
+
         general.addEntry(entryBuilder.startDoubleField(Component.translatable("config.zipline.option.exit_jump_multiplier"), config.exitJumpMultiplier)
                 .setDefaultValue(1.4)
                 .setTooltip(Component.translatable("config.zipline.option.exit_jump_multiplier.tooltip"))
@@ -127,6 +135,13 @@ public class ClothConfigIntegration {
                 .setDefaultValue(true)
                 .setTooltip(Component.translatable("config.zipline.option.exit_jump_uses_look_direction.tooltip"))
                 .setSaveConsumer(newValue -> { if (!isServer) config.exitJumpUsesLookDirection = newValue; })
+                .build());
+
+        general.addEntry(entryBuilder.startDoubleField(Component.translatable("config.zipline.option.exit_jump_look_boost"), config.exitJumpLookBoost)
+                .setDefaultValue(0.5)
+                .setMin(0.0)
+                .setTooltip(Component.translatable("config.zipline.option.exit_jump_look_boost.tooltip"))
+                .setSaveConsumer(newValue -> { if (!isServer) config.exitJumpLookBoost = newValue; })
                 .build());
 
         general.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.zipline.option.consume_durability"), config.consumeDurability)

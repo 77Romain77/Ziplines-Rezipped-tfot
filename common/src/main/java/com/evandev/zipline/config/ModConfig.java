@@ -15,7 +15,7 @@ import java.io.IOException;
 public class ModConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final File CONFIG_FILE = Services.PLATFORM.getConfigDirectory().resolve("zipline.json").toFile();
-    private static final int CURRENT_CONFIG_VERSION = 2;
+    private static final int CURRENT_CONFIG_VERSION = 3;
 
     private static ModConfig INSTANCE;
     private static ModConfig BACKUP;
@@ -35,8 +35,10 @@ public class ModConfig {
     public boolean downhillOnly = true;
     public double downhillHeightTolerance = 0.5;
     public boolean autoDetachAtEnd = true;
+    public double endDetectionDistance = 2.0;
     public double exitJumpMultiplier = 1.4;
     public boolean exitJumpUsesLookDirection = true;
+    public double exitJumpLookBoost = 0.5;
     public boolean consumeDurability = true;
     public int releaseCooldown = 10;
     public boolean jumpRequiredToDismount = true;
@@ -58,15 +60,29 @@ public class ModConfig {
                 }
 
                 int loadedConfigVersion = json.has("configVersion") ? json.get("configVersion").getAsInt() : 1;
-                if (loadedConfigVersion < CURRENT_CONFIG_VERSION) {
+                boolean migrated = false;
+
+                if (loadedConfigVersion < 2) {
                     if (json.has("maxSpeed") && INSTANCE.maxSpeed > 0.0) {
                         INSTANCE.maxSpeed *= 20.0;
                     }
-                    INSTANCE.configVersion = CURRENT_CONFIG_VERSION;
-                    Constants.LOG.info("Migrated Zipline config to version {}. maxSpeed is now expressed in blocks per second.", CURRENT_CONFIG_VERSION);
+                    migrated = true;
+                }
+
+                if (loadedConfigVersion < 3) {
+                    if (!json.has("endDetectionDistance")) {
+                        INSTANCE.endDetectionDistance = 2.0;
+                    }
+                    if (!json.has("exitJumpLookBoost")) {
+                        INSTANCE.exitJumpLookBoost = 0.5;
+                    }
+                    migrated = true;
+                }
+
+                INSTANCE.configVersion = CURRENT_CONFIG_VERSION;
+                if (migrated) {
+                    Constants.LOG.info("Migrated Zipline config to version {}.", CURRENT_CONFIG_VERSION);
                     save();
-                } else {
-                    INSTANCE.configVersion = CURRENT_CONFIG_VERSION;
                 }
             } catch (Exception e) {
                 Constants.LOG.error("Failed to load zipline.json", e);
