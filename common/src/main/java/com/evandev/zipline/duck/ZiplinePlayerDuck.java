@@ -21,4 +21,16 @@ public interface ZiplinePlayerDuck {
 
     boolean zipline$isActuallyUsing();
     void zipline$setActuallyUsing(boolean using);
+
+    int zipline$getAttachTicks();
+    void zipline$setAttachTicks(int ticks);
+
+    boolean zipline$wasJumpingAtAttach();
+    void zipline$setWasJumpingAtAttach(boolean wasJumping);
+
+    Cable zipline$getLastExitedCable();
+    void zipline$setLastExitedCable(Cable cable);
+
+    double zipline$getLastExitDownhillProgress();
+    void zipline$setLastExitDownhillProgress(double progress);
 }

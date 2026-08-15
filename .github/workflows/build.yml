@@ -2,9 +2,16 @@ name: Build
 
 on:
   push:
-    branches: [ "main", "1.20.1", "1.21.1", "26.1" ]
   pull_request:
     branches: [ "main", "1.20.1", "1.21.1", "26.1" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -36,7 +43,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: Zipline-${{ github.ref_name }}
+          name: Zipline-${{ github.run_id }}
           path: |
             **/build/libs/*.jar
             !**/build/libs/*-sources.jar
